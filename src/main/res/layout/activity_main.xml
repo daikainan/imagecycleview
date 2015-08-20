@@ -1,0 +1,12 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.dkn.view.ImageCycleView
+        android:id="@+id/icv_topView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+    </org.dkn.view.ImageCycleView>
+
+</RelativeLayout>
