@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,25 +66,25 @@ import java.util.List;
 
 
  mImageCycleView.loadData(list, new ImageCycleView.LoadImageCallBack() {
-	@Override
-	public ImageView loadAndDisplay(ImageCycleView.ImageInfo imageInfo){
+@Override
+public ImageView loadAndDisplay(ImageCycleView.ImageInfo imageInfo){
 
-		//本地图片
-		//ImageView imageView=new ImageView(MainActivity.this);
-		//imageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
-		//return imageView;
+//本地图片
+//ImageView imageView=new ImageView(MainActivity.this);
+//imageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
+//return imageView;
 
-		//使用SmartImageView
-		//SmartImageView smartImageView=new SmartImageView(MainActivity.this);
-		//smartImageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
-		//return smartImageView;
+//使用SmartImageView
+//SmartImageView smartImageView=new SmartImageView(MainActivity.this);
+//smartImageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
+//return smartImageView;
 
-		//使用BitmapUtils
-		BitmapUtils bitmapUtils=new BitmapUtils(MainActivity.this);
-		ImageView imageView=new ImageView(MainActivity.this);
-		bitmapUtils.display(imageView,imageInfo.image.toString());
-		return imageView;
-	}
+//使用BitmapUtils
+BitmapUtils bitmapUtils=new BitmapUtils(MainActivity.this);
+ImageView imageView=new ImageView(MainActivity.this);
+bitmapUtils.display(imageView,imageInfo.image.toString());
+return imageView;
+}
 });
  *
  *
@@ -94,20 +93,15 @@ import java.util.List;
  *
  */
 public class ImageCycleView extends FrameLayout {
-	
+
 	/**
 	 * 上下文
 	 */
 	private Context mContext;
 	/**
-	 * 控件宽度
-	 */
-	private int mWidth;
-
-	/**
 	 * 图片轮播视图
 	 */
-	private ViewPager mViewPager;
+	private ImageCycleViewPager mViewPager;
 	/**
 	 * 数据集合
 	 * Map<String,String> map=new HashMap<String, String>();
@@ -177,8 +171,10 @@ public class ImageCycleView extends FrameLayout {
 	 */
 	private void initView() {
 		View.inflate(mContext, R.layout.view_image_cycle, this);
-		mViewPager = (ViewPager)findViewById(R.id.vp_image_cycle);
-		mViewPager.setAdapter(new ImageCycleAdapter());
+		FrameLayout fl_image_cycle = (FrameLayout) findViewById(R.id.fl_image_cycle);
+		mViewPager=new ImageCycleViewPager(mContext);
+		mViewPager.setLayoutParams(new  ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+		fl_image_cycle.addView(mViewPager);
 		mViewPager.setOnPageChangeListener(new ImageCyclePageChangeListener());
 		mIndicationGroup = (LinearLayout) findViewById(R.id.ll_indication_group);
 		mText=(TextView)findViewById(R.id.tv_text);
@@ -196,10 +192,10 @@ public class ImageCycleView extends FrameLayout {
 	 * @param indication_self_percent 自身高度的百分比 >=0f
 	 */
 	public void setIndicationStyle(IndicationStyle indicationStyle,int unFocus,int focus,float indication_self_percent){
-		if(indicationStyle==IndicationStyle.COLOR){
+		if(indicationStyle== IndicationStyle.COLOR){
 			unFocusIndicationStyle=drawCircle(50,unFocus);
 			focusIndicationStyle=drawCircle(50,focus);
-		}else if(indicationStyle==IndicationStyle.IMAGE){
+		}else if(indicationStyle== IndicationStyle.IMAGE){
 			unFocusIndicationStyle= BitmapFactory.decodeResource(mContext.getResources(),unFocus);
 			focusIndicationStyle=BitmapFactory.decodeResource(mContext.getResources(), focus);
 		}
@@ -245,6 +241,7 @@ public class ImageCycleView extends FrameLayout {
 			new IllegalArgumentException("LoadImageCallBack 回调函数不能为空！");
 		}
 		mLoadImageCallBack=callBack;
+		mViewPager.setAdapter(new ImageCycleAdapter());
 		//最大值中间 的第一个
 		mViewPager.setCurrentItem(Integer.MAX_VALUE/2-((Integer.MAX_VALUE/2)%mCount));
 	}
@@ -266,7 +263,7 @@ public class ImageCycleView extends FrameLayout {
 		 * @param imageView 被点击的View对象
 		 * @param imageInfo 数据信息
 		 */
-		void onClick(View imageView,ImageInfo imageInfo);
+		void onClick(View imageView, ImageInfo imageInfo);
 	}
 
 
@@ -279,7 +276,6 @@ public class ImageCycleView extends FrameLayout {
 			ImageView imageView = new ImageView(mContext);
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mIndicationGroup.getLayoutParams().height, LinearLayout.LayoutParams.MATCH_PARENT);
 			params.leftMargin = (int)(mIndicationGroup.getLayoutParams().height*indication_self_margin_percent);
-			Log.e("eee",params.leftMargin+"==");
 			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 			imageView.setLayoutParams(params);
 			if(i==0) {
@@ -299,7 +295,7 @@ public class ImageCycleView extends FrameLayout {
 		canvas.drawCircle(radius / 2, radius / 2, radius / 2, paint);
 		return bitmap;
 	}
-	
+
 
 	public static class ImageInfo{
 		public ImageInfo(Object image, String text, Object value) {
@@ -329,7 +325,7 @@ public class ImageCycleView extends FrameLayout {
 	 * @author 代凯男
 	 */
 	private final class ImageCyclePageChangeListener implements OnPageChangeListener {
-		
+
 		//上次指示器指示的位置,开始为默认位置0
 		private int preIndex=0;
 
@@ -345,7 +341,7 @@ public class ImageCycleView extends FrameLayout {
 			((ImageView)(mIndicationGroup.getChildAt(index))).setImageBitmap(focusIndicationStyle);
 			preIndex=index;
 		}
-		
+
 		@Override
 		public void onPageScrollStateChanged(int state) {
 		}
@@ -419,7 +415,6 @@ public class ImageCycleView extends FrameLayout {
 	private Handler handler=new Handler(new Handler.Callback() {
 		@Override
 		public boolean handleMessage(Message msg) {
-			Log.e("eeeeee","2222");
 			if (mViewPager != null) {
 				mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
 				handler.sendEmptyMessageDelayed(0,mCycleDelayed);
@@ -461,4 +456,46 @@ public class ImageCycleView extends FrameLayout {
 			startImageCycle();
 		}
 	}
+
+
+	/**
+	 * 自定义ViewPager主要用于事件处理
+	 */
+	public class ImageCycleViewPager  extends ViewPager {
+
+		public ImageCycleViewPager(Context context) {
+			super(context);
+		}
+
+		public ImageCycleViewPager(Context context, AttributeSet attrs) {
+			super(context, attrs);
+		}
+
+		/**
+		 * 事件拦截
+		 */
+		@Override
+		public boolean onInterceptTouchEvent(MotionEvent ev) {
+			return super.onInterceptTouchEvent(ev);
+		}
+
+		/**
+		 * 事件分发
+		 */
+		@Override
+		public boolean dispatchTouchEvent(MotionEvent ev) {
+			getParent().requestDisallowInterceptTouchEvent(true);
+			return super.dispatchTouchEvent(ev);
+		}
+		/**
+		 * 事件处理
+		 */
+		@Override
+		public boolean onTouchEvent(MotionEvent ev) {
+			return super.onTouchEvent(ev);
+		}
+
+
+	}
+
 }
