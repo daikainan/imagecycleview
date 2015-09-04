@@ -59,6 +59,11 @@ import java.util.List;
  //list.add(new ImageCycleView.ImageInfo(R.drawable.a2,"222222222222222",""));
  //list.add(new ImageCycleView.ImageInfo(R.drawable.a3,"3333333333333",""));
 
+ //SD卡图片资源
+ list.add(new ImageCycleView.ImageInfo(new File(Environment.getExternalStorageDirectory(),"a1.jpg"),"11111",""));
+ list.add(new ImageCycleView.ImageInfo(new File(Environment.getExternalStorageDirectory(),"a2.jpg"),"22222",""));
+ list.add(new ImageCycleView.ImageInfo(new File(Environment.getExternalStorageDirectory(),"a3.jpg"),"33333",""));
+
  //使用网络加载图片
  list.add(new ImageCycleView.ImageInfo("http://img.lakalaec.com/ad/57ab6dc2-43f2-4087-81e2-b5ab5681642d.jpg","3333333333333",""));
  list.add(new ImageCycleView.ImageInfo("http://img.lakalaec.com/ad/cb56a1a6-6c33-41e4-9c3c-363f4ec6b728.jpg","222222222222222",""));
@@ -73,6 +78,11 @@ public ImageView loadAndDisplay(ImageCycleView.ImageInfo imageInfo){
 //ImageView imageView=new ImageView(MainActivity.this);
 //imageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
 //return imageView;
+
+//使用SD卡图片
+SmartImageView smartImageView=new SmartImageView(MainActivity.this);
+smartImageView.setImageURI(Uri.fromFile((File)imageInfo.image));
+return smartImageView;
 
 //使用SmartImageView
 //SmartImageView smartImageView=new SmartImageView(MainActivity.this);
@@ -289,7 +299,7 @@ public class ImageCycleView extends FrameLayout {
 
 	private Bitmap drawCircle(int radius,int color){
 		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setColor(color);// 设置红色
+		paint.setColor(color);// 设置颜色
 		Bitmap bitmap=Bitmap.createBitmap(radius,radius, Bitmap.Config.ARGB_8888);
 		Canvas canvas=new Canvas(bitmap);
 		canvas.drawCircle(radius / 2, radius / 2, radius / 2, paint);

@@ -27,11 +27,20 @@ public class MainActivity extends Activity {
 //		mImageCycleView.setIndicationStyle(ImageCycleView.IndicationStyle.IMAGE,
 //				R.drawable.dian_unfocus, R.drawable.dian_focus, 1f);
 
+//		Log.e("eee", Environment.getExternalStorageDirectory().getPath()+ File.separator+"a1.jpg");
 
 		List<ImageCycleView.ImageInfo> list=new ArrayList<ImageCycleView.ImageInfo>();
+
+		//res图片资源
 		list.add(new ImageCycleView.ImageInfo(R.drawable.a1,"111111111111",""));
 		list.add(new ImageCycleView.ImageInfo(R.drawable.a2,"222222222222222",""));
 		list.add(new ImageCycleView.ImageInfo(R.drawable.a3,"3333333333333",""));
+
+		//SD卡图片资源
+//		list.add(new ImageCycleView.ImageInfo(new File(Environment.getExternalStorageDirectory(),"a1.jpg"),"11111",""));
+//		list.add(new ImageCycleView.ImageInfo(new File(Environment.getExternalStorageDirectory(),"a2.jpg"),"22222",""));
+//		list.add(new ImageCycleView.ImageInfo(new File(Environment.getExternalStorageDirectory(),"a3.jpg"),"33333",""));
+
 
 		//使用网络加载图片
 //		list.add(new ImageCycleView.ImageInfo("http://img.lakalaec.com/ad/57ab6dc2-43f2-4087-81e2-b5ab5681642d.jpg","11","eeee"));
@@ -54,7 +63,13 @@ public class MainActivity extends Activity {
 				imageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
 				return imageView;
 
-				//使用SmartImageView，既可以使用网络图片也可以使用本地资源
+
+//				//使用SD卡图片
+//				SmartImageView smartImageView=new SmartImageView(MainActivity.this);
+//				smartImageView.setImageURI(Uri.fromFile((File)imageInfo.image));
+//				return smartImageView;
+
+//				//使用SmartImageView，既可以使用网络图片也可以使用本地资源
 //				SmartImageView smartImageView=new SmartImageView(MainActivity.this);
 //				smartImageView.setImageResource(Integer.parseInt(imageInfo.image.toString()));
 //				return smartImageView;
